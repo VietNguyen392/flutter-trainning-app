@@ -12,22 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Image Picker Demo',
-      home: MyHomePage(title: 'Image Picker Example'),
-    );
-  }
-}
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, this.title}) : super(key: key);
 
@@ -90,23 +74,16 @@ class _MyHomePageState extends State<MyHomePage> {
           source: source, maxDuration: const Duration(seconds: 10));
       await _playVideo(file);
     } else if (isMultiImage) {
-      await _displayPickImageDialog(context!,
-          (double? maxWidth, double? maxHeight, int? quality) async {
-        try {
-          final List<XFile> pickedFileList = await _picker.pickMultiImage(
-            maxWidth: maxWidth,
-            maxHeight: maxHeight,
-            imageQuality: quality,
-          );
-          setState(() {
-            _imageFileList = pickedFileList;
-          });
-        } catch (e) {
-          setState(() {
-            _pickImageError = e;
-          });
-        }
-      });
+      try {
+        final List<XFile> pickedFileList = await _picker.pickMultiImage();
+        setState(() {
+          _imageFileList = pickedFileList;
+        });
+      } catch (e) {
+        setState(() {
+          _pickImageError = e;
+        });
+      }
     } else {
       await _displayPickImageDialog(context!,
           (double? maxWidth, double? maxHeight, int? quality) async {
@@ -180,11 +157,9 @@ class _MyHomePageState extends State<MyHomePage> {
     if (_imageFileList != null) {
       return Semantics(
         label: 'image_picker_example_picked_images',
-        child: ListView.builder(
+        child: GridView.builder(
           key: UniqueKey(),
           itemBuilder: (BuildContext context, int index) {
-            // Why network for web?
-            // See https://pub.dev/packages/image_picker#getting-ready-for-the-web-platform
             return Semantics(
               label: 'image_picker_example_picked_image',
               child: kIsWeb
@@ -192,6 +167,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   : Image.file(File(_imageFileList![index].path)),
             );
           },
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3),
           itemCount: _imageFileList!.length,
         ),
       );
