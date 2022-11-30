@@ -36,4 +36,6 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
+## Result
 
+![alt-text](https://github.com/VietNguyen392/flutter-gallery-app/blob/master/2022-11-30%2020-40-33.gif)
