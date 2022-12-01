@@ -38,4 +38,4 @@ samples, guidance on mobile development, and a full API reference.
 
 ## Result
 
-![alt-text](https://github.com/VietNguyen392/flutter-gallery-app/blob/master/2022-11-30%2020-40-33.gif)
+![alt-text](https://github.com/VietNguyen392/flutter-gallery-app/blob/master/2022-12-01%2010-52-23.gif)
