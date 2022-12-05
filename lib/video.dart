@@ -53,55 +53,22 @@ class _VideoPageState extends State<VideoPage> {
     }
   }
 
-  Future<void> _onImageButtonPressed(ImageSource source,
-      {BuildContext? context, bool isMultiImage = false}) async {
-    if (_controller != null) {
-      await _controller!.setVolume(0.0);
-    }
-    if (isVideo) {
-      final XFile? file = await _picker.pickVideo(
-          source: source, maxDuration: const Duration(seconds: 10));
-      await _playVideo(file);
-    } else if (isMultiImage) {
-      await _displayPickImageDialog(context!,
-          (double? maxWidth, double? maxHeight, int? quality) async {
-        try {
-          final List<XFile> pickedFileList = await _picker.pickMultiImage(
-            maxWidth: maxWidth,
-            maxHeight: maxHeight,
-            imageQuality: quality,
-          );
-          setState(() {
-            _imageFileList = pickedFileList;
-          });
-        } catch (e) {
-          setState(() {
-            _pickImageError = e;
-          });
-        }
-      });
-    } else {
-      await _displayPickImageDialog(context!,
-          (double? maxWidth, double? maxHeight, int? quality) async {
-        try {
-          final XFile? pickedFile = await _picker.pickImage(
-            source: source,
-            maxWidth: maxWidth,
-            maxHeight: maxHeight,
-            imageQuality: quality,
-          );
-          setState(() {
-            _setImageFileListFromFile(pickedFile);
-          });
-        } catch (e) {
-          setState(() {
-            _pickImageError = e;
-          });
-        }
-      });
-    }
-  }
 
+  Future<void> _onImageButtonPressed(ImageSource source,
+      {BuildContext? context}) async {
+    await _displayPickImageDialog(context!,
+            (double? maxWidth, double? maxHeight, int? quality) async {
+          try {
+            final XFile? file = await _picker.pickVideo(
+                source: source, maxDuration: const Duration(seconds: 10));
+                await _playVideo(file);
+          } catch (e) {
+            setState(() {
+              _pickImageError = e;
+            });
+          }
+        });
+  }
   @override
   void deactivate() {
     if (_controller != null) {
@@ -145,46 +112,12 @@ class _VideoPageState extends State<VideoPage> {
     );
   }
 
-  Widget _previewImages() {
-    final Text? retrieveError = _getRetrieveErrorWidget();
-    if (retrieveError != null) {
-      return retrieveError;
-    }
-    if (_imageFileList != null) {
-      return Semantics(
-        label: 'image_picker_example_picked_images',
-        child: ListView.builder(
-          key: UniqueKey(),
-          itemBuilder: (BuildContext context, int index) {
-            return Semantics(
-              label: 'image_picker_example_picked_image',
-              child: kIsWeb
-                  ? Image.network(_imageFileList![index].path)
-                  : Image.file(File(_imageFileList![index].path)),
-            );
-          },
-          itemCount: _imageFileList!.length,
-        ),
-      );
-    } else if (_pickImageError != null) {
-      return Text(
-        'Pick image error: $_pickImageError',
-        textAlign: TextAlign.center,
-      );
-    } else {
-      return const Text(
-        'You have not yet picked an image.',
-        textAlign: TextAlign.center,
-      );
-    }
-  }
+
 
   Widget _handlePreview() {
-    if (isVideo) {
+
       return _previewVideo();
-    } else {
-      return _previewImages();
-    }
+
   }
 
   Future<void> retrieveLostData() async {
@@ -284,40 +217,21 @@ class _VideoPageState extends State<VideoPage> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: const Text('Add optional parameters'),
-            content: Column(
-              children: <Widget>[
-                TextField(
-                  controller: maxWidthController,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  decoration: const InputDecoration(
-                      hintText: 'Enter maxWidth if desired'),
-                ),
-                TextField(
-                  controller: maxHeightController,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
-                  decoration: const InputDecoration(
-                      hintText: 'Enter maxHeight if desired'),
-                ),
-                TextField(
-                  controller: qualityController,
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
-                      hintText: 'Enter quality if desired'),
-                ),
-              ],
+            title: const Text('Required Permision'),
+            content: const SizedBox(
+              height: 100,
+              child: Text('Grand permision to access gallery for this app ?'),
             ),
             actions: <Widget>[
-              TextButton(
-                child: const Text('CANCEL'),
+              ElevatedButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                child: const Text('NO'),
               ),
-              TextButton(
-                  child: const Text('PICK'),
+              ElevatedButton(
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                   onPressed: () {
                     final double? width = maxWidthController.text.isNotEmpty
                         ? double.parse(maxWidthController.text)
@@ -330,7 +244,8 @@ class _VideoPageState extends State<VideoPage> {
                         : null;
                     onPick(width, height, quality);
                     Navigator.of(context).pop();
-                  }),
+                  },
+                  child: const Text('YES')),
             ],
           );
         });

@@ -52,7 +52,6 @@ class _PhotoPageState extends State<PhotoPage> {
 
   @override
   void dispose() {
-    // _disposeVideoController();
     maxWidthController.dispose();
     maxHeightController.dispose();
     qualityController.dispose();
