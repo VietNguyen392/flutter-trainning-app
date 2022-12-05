@@ -5,17 +5,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, this.title}) : super(key: key);
+class PhotoPage extends StatefulWidget {
+  const PhotoPage({Key? key, this.title}) : super(key: key);
 
   final String? title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<PhotoPage> createState() => _PhotoPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _PhotoPageState extends State<PhotoPage> {
   List<XFile>? _imageFileList;
 
   void _setImageFileListFromFile(XFile? value) {
@@ -230,4 +229,3 @@ class _MyHomePageState extends State<MyHomePage> {
 
 typedef OnPickImageCallback = void Function(
     double? maxWidth, double? maxHeight, int? quality);
-
