@@ -1,4 +1,4 @@
-# image_app
+# paint_app
 
 A new Flutter project.
 
@@ -9,20 +9,27 @@ To run this project firstly already have flutter sdk, android studio install in 
 Then clone this project 
 
 ```bash
-git clone https://github.com/VietNguyen392/flutter-gallery-app.git
+git clone https://github.com/VietNguyen392/flutter-trainning-app.git
 ```
 
 After clone run 
 ```bash 
+git switch paint_app
+```
+
+
+then run  
+```bash
 flutter pub get
 ```
 in terminal to get all dependencies
 
-then run  
+then
 ```bash
 flutter run
 ```
 
+to run the app
 ## Getting Started
 
 This project is a starting point for a Flutter application.
